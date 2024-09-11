@@ -116,9 +116,30 @@ def verify_project_created(key_json):
 def generate_secret_key(longitud=50):
     return secrets.token_hex(longitud // 2)
 
+def create_requirements_file(file_path='requirements.txt'):
+    # List of dependencies
+    requirements = [
+        'Flask',
+        'python-decouple',
+        'flask_swagger_ui',
+        'requests',
+        'paramiko',
+        'Flask-Cors',
+        'python-dotenv',
+        'APScheduler',
+        'SQLAlchemy',
+        'PyMySQL'
+    ]
+    
+    # Create and write to the requirements file
+    with open(file_path, 'w') as file:
+        file.write("\n".join(requirements))
+
 # Llamar a la función para crear el archivo .env
 create_env_file()
 create_virtual_environment()
+# Call the function to create the requirements.txt
+create_requirements_file()
 
 path_app = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 
