@@ -117,8 +117,7 @@ def verify_project_created(key_json):
 def generate_secret_key(longitud=50):
     return secrets.token_hex(longitud // 2)
 
-
-def create_requirements():
+def create_requirements_file(file_path='requirements.txt'):
     dependencies = [
         "Flask",
         "python-decouple",
@@ -139,7 +138,7 @@ def create_requirements():
         "openpyxl"
     ]
 
-    with open("requirements.txt", "w") as file:
+    with open(file_path, "w") as file:
         for dependence in dependencies:
             file.write(dependence + "\n")
 
@@ -212,7 +211,7 @@ def update_configuration_json():
 # Llamar a la función para crear el archivo .env
 create_env_file()
 create_virtual_environment()
-create_requirements()
+create_requirements_file()
 install_dependencies()
 update_configuration_json()
 
