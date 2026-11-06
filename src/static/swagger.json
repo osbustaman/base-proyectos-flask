@@ -72,6 +72,26 @@
         "bearerAuth": []
     }],
     "paths": {
+        "/listado-productos/": {
+            "get": {
+                "tags": ["Productos"],
+                "summary": "Obtener productos activos",
+                "security": [{
+                    "bearerAuth": []
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Listado de productos"
+                    },
+                    "401": {
+                        "description": "Bearer token ausente, inválido o expirado"
+                    },
+                    "503": {
+                        "description": "El servicio de autenticación de Laravel no está disponible"
+                    }
+                }
+            }
+        },
         "/login": {
             "post": {
                 "tags": [""],

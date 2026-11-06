@@ -22,15 +22,16 @@ def create_env_file():
     variables_entorno = {
         "SECRET_KEY": generate_secret_key(longitud=50),
         "EXPIRE_DATE": 1,
-        "ENVIRONMENTS": "development",
         "LOG_DIRECTORY": "src/utils/log",
-        "ENVIRONMENTS": "desarrollo",
+        "ENVIRONMENTS": "development",
         "DB_HOST": "",
         "DB_USER": "",
         "DB_PASSWORD": "",
         "DB_PORT": "",
         "DB_NAME": "",
-        "DB_TYPE": "[postgresql|mysql]"
+        "DB_TYPE": "",
+        "LARAVEL_API_URL": "http://localhost:8085/api",
+        "LARAVEL_AUTH_TIMEOUT": 5
     }
 
     # Crear el archivo .env y agregar las variables de entorno
@@ -116,19 +117,111 @@ def verify_project_created(key_json):
 def generate_secret_key(longitud=50):
     return secrets.token_hex(longitud // 2)
 
+
+def create_requirements():
+    dependencies = [
+        "Flask",
+        "python-decouple",
+        "flask-swagger-ui",
+        "python-dotenv",
+        "APScheduler",
+        "requests",
+        "sqlalchemy",
+        "mysql-connector-python",
+        "flask-cors",
+        "PyJWT",
+        "bcrypt",
+        "psycopg2-binary",
+        "paramiko",
+        "# boto3",
+        "firebase-admin",
+        "pandas",
+        "openpyxl"
+    ]
+
+    with open("requirements.txt", "w") as file:
+        for dependence in dependencies:
+            file.write(dependence + "\n")
+
+def install_dependencies2():
+    # Activar el entorno virtual
+    subprocess.run(["source", "env/bin/activate"], shell=True)
+    # Instalar las dependencias
+    #subprocess.run(["pip", "install", "-r", "requirements.txt"])
+
+def install_dependencies():
+    # Crear un script de shell para activar el entorno virtual e instalar las dependencias
+    script = """
+    source env/bin/activate
+    pip install -r requirements.txt
+    """
+
+    with open("install.sh", "w") as file:
+        file.write(script)
+
+    # Hacer el script ejecutable
+    os.chmod("install.sh", 0o775)
+
+    # Ejecutar el script
+    result = subprocess.run(["./install.sh"], capture_output=True, text=True, shell=True)
+
+    if result.returncode != 0:
+        print("Error al instalar las dependencias")
+        print(result.stderr)
+        return False
+
+    return True
+
+
+def update_configuration_json():
+    ruta_archivo = "configuration.json"
+    dependencies = [
+        "Flask",
+        "python-decouple",
+        "flask-swagger-ui",
+        "python-dotenv",
+        "APScheduler",
+        "requests",
+        "sqlalchemy",
+        "mysql-connector-python",
+        "flask-cors",
+        "PyJWT",
+        "bcrypt",
+        "psycopg2-binary",
+        "paramiko",
+        "# boto3",
+        "firebase-admin",
+        "pandas",
+        "openpyxl"
+    ]
+
+    if os.path.isfile(ruta_archivo):
+        with open(ruta_archivo, "r") as archivo:
+            try:
+                data = json.load(archivo)
+                if "installed_libraries" not in data:
+                    data["installed_libraries"] = {}
+                for dependency in dependencies:
+                    data["installed_libraries"][dependency] = "installed"
+                with open(ruta_archivo, "w") as archivo:
+                    json.dump(data, archivo, indent=4)
+            except json.JSONDecodeError:
+                pass
+    else:
+        generate_json_file()
 # Llamar a la función para crear el archivo .env
 create_env_file()
 create_virtual_environment()
+create_requirements()
+install_dependencies()
+update_configuration_json()
 
 path_app = os.path.join(os.path.dirname(os.path.abspath(__file__)))
 
 print(" ================================================ ")
 print("\n INTRUCCIONES: \n")
 print("Proyecto creado con éxito")
-print(f"Para activar el entorno virtual, ejecuta el siguiente comando:\n")
-print(f"1. cd {path_app}")
-print(f"2. source env/bin/activate")
-print(f"3. pip install -r requirements.txt")
-print(f"4. python3 index.py")
+print(f"1 ==> source env/bin/activate (solo en caso que no inicie el entorno virtual)")
+print(f"2 ==> python3 index.py")
 print("\n Para mas detalles revisar README.md\n")
 print("\n ================================================ ")

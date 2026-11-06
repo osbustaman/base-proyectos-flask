@@ -4,6 +4,7 @@ from flask_swagger_ui import get_swaggerui_blueprint
 from decouple import config as config_environment
 
 from src import api as api
+from src import api_formulario as api_formulario
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -32,5 +33,9 @@ def init_app(config):
     app.config.from_object(config)
 
     app.register_blueprint(api.main_ejemplo, url_prefix='/ejemplo')
+
+
+
+    app.register_blueprint(api_formulario.main_listado_productos, url_prefix='/listado-productos')
 
     return app

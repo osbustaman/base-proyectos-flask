@@ -1,0 +1,23 @@
+{
+    "is_create_project": "true",
+    "create_virtual_environment": "true",
+    "installed_libraries": {
+        "Flask": "installed",
+        "python-decouple": "installed",
+        "flask-swagger-ui": "installed",
+        "python-dotenv": "installed",
+        "APScheduler": "installed",
+        "requests": "installed",
+        "sqlalchemy": "installed",
+        "mysql-connector-python": "installed",
+        "mysqlclient": "installed",
+        "flask-cors": "installed",
+        "PyJWT": "installed",
+        "psycopg2-binary": "installed",
+        "paramiko": "installed",
+        "# boto3": "installed",
+        "firebase-admin": "installed",
+        "pandas": "installed",
+        "openpyxl": "installed"
+    }
+}

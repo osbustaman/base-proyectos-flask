@@ -1,0 +1,17 @@
+Flask
+python-decouple
+flask-swagger-ui
+python-dotenv
+APScheduler
+requests
+sqlalchemy
+mysql-connector-python
+flask-cors
+PyJWT
+bcrypt
+psycopg2-binary
+paramiko
+# boto3
+firebase-admin
+pandas
+openpyxl

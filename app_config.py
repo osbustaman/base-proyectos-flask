@@ -1,10 +1,13 @@
 from decouple import config
 
+
 class Config():
     SECRET_KEY = config('SECRET_KEY')
 
+
 class DevelopmentConfig(Config):
     DEBUG = True
+
 
 configure = {
     'development': DevelopmentConfig
@@ -24,12 +27,12 @@ configure = {
 # Se pueden agregar mas variables de entorno para configurar la base de datos
 
 DATABASES = {
-    # config('ENVIRONMENTS'): {
-    #     'DB_HOST': config('DB_HOST'),
-    #     'DB_USER': config('DB_USER'),
-    #     'DB_PASSWORD': config('DB_PASSWORD'),
-    #     'DB_PORT': config('DB_PORT'),
-    #     'DB_NAME': config('DB_NAME'),
-    #     'DB_TYPE': config('DB_TYPE'),
-    # }
+    config('ENVIRONMENTS', default='development'): {
+        'DB_HOST': config('DB_HOST', default=''),
+        'DB_USER': config('DB_USER', default=''),
+        'DB_PASSWORD': config('DB_PASSWORD', default=''),
+        'DB_PORT': config('DB_PORT', default=''),
+        'DB_NAME': config('DB_NAME', default=''),
+        'DB_TYPE': config('DB_TYPE', default=''),
+    }
 }

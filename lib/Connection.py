@@ -2,15 +2,15 @@ from app_config import DATABASES
 
 from sqlalchemy import create_engine, pool
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.engine import URL
 from sqlalchemy.orm import sessionmaker
-from urllib.parse import quote_plus
 
 class Connection():
 
     Base = declarative_base()
 
     @classmethod
-    def get_session(self, connection_name):
+    def get_session(cls, connection_name):
         """
         Returns a session object for the specified database connection.
 
@@ -29,11 +29,22 @@ class Connection():
         DB_PASSWORD = data['DB_PASSWORD']
         DB_PORT = data['DB_PORT']
         DB_NAME = data['DB_NAME']
-        DB_TYPE = data['DB_TYPE']
+        DB_TYPE = data['DB_TYPE'].strip()
 
-        encoded_password = quote_plus(DB_PASSWORD)
-        connection_string = f"{DB_TYPE}://{DB_USER}:{encoded_password}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
-        engine = create_engine(connection_string, pool_pre_ping=True, poolclass=pool.NullPool)
+        if DB_TYPE.lower() == 'mysql':
+            DB_TYPE = 'mysql+mysqlconnector'
+        elif not DB_TYPE:
+            raise ValueError("DB_TYPE no está configurado en el archivo .env.")
+
+        connection_url = URL.create(
+            drivername=DB_TYPE,
+            username=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            port=int(DB_PORT) if DB_PORT else None,
+            database=DB_NAME,
+        )
+        engine = create_engine(connection_url, pool_pre_ping=True, poolclass=pool.NullPool)
         Session = sessionmaker(bind=engine)
         
         # Retorna la sesión
